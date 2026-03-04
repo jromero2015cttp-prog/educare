@@ -1,11 +1,13 @@
 import { NextRequest } from "next/server";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/lib/auth";
 
 export const dynamic = "force-dynamic";
+export const runtime = "nodejs";
 
 export async function POST(request: NextRequest) {
   try {
+    const { getServerSession } = await import("next-auth");
+    const { authOptions } = await import("@/lib/auth");
+
     const session = await getServerSession(authOptions);
 
     if (!session?.user) {
@@ -64,7 +66,6 @@ Always show fractions with decimals: $\\frac{3}{4}$ (0.75)
 
 TEACHING: Be warm, encouraging. Introduce yourself as Maya in first message. Use table format for all solutions. Offer practice problems when student understands.`;
 
-    // Build Anthropic messages
     const anthropicMessages: Array<{ role: "user" | "assistant"; content: unknown }> = [];
 
     if (history && Array.isArray(history)) {
@@ -77,96 +78,4 @@ TEACHING: Be warm, encouraging. Introduce yourself as Maya in first message. Use
 
     if (imageBase64) {
       const matches = imageBase64.match(/^data:([^;]+);base64,(.+)$/);
-      const mediaType = matches?.[1] ?? "image/jpeg";
-      const base64Data = matches?.[2] ?? imageBase64;
-
-      anthropicMessages.push({
-        role: "user",
-        content: [
-          { type: "text", text: message || "Please analyze this image and help me understand it." },
-          { type: "image", source: { type: "base64", media_type: mediaType, data: base64Data } },
-        ],
-      });
-    } else {
-      anthropicMessages.push({ role: "user", content: message });
-    }
-
-    const response = await fetch("https://api.anthropic.com/v1/messages", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "x-api-key": process.env.ANTHROPIC_API_KEY ?? "",
-        "anthropic-version": "2023-06-01",
-      },
-      body: JSON.stringify({
-        model: "claude-sonnet-4-5",
-        max_tokens: 2000,
-        system: systemPrompt,
-        messages: anthropicMessages,
-        stream: true,
-      }),
-    });
-
-    if (!response.ok) {
-      const errorText = await response.text();
-      console.error("Anthropic API error:", errorText);
-      return new Response(JSON.stringify({ message: "AI service error" }), {
-        status: 500,
-        headers: { "Content-Type": "application/json" },
-      });
-    }
-
-    // Transform Anthropic SSE to OpenAI-compatible format for frontend
-    const stream = new ReadableStream({
-      async start(controller) {
-        const reader = response.body?.getReader();
-        const decoder = new TextDecoder();
-        const encoder = new TextEncoder();
-
-        try {
-          while (true) {
-            const { done, value } = (await reader?.read()) ?? { done: true, value: undefined };
-            if (done) break;
-
-            const chunk = decoder.decode(value);
-            const lines = chunk.split("\n").filter((l: string) => l.trim());
-
-            for (const line of lines) {
-              if (line.startsWith("data: ")) {
-                const data = line.slice(6);
-                try {
-                  const parsed = JSON.parse(data);
-                  if (parsed.type === "content_block_delta" && parsed.delta?.type === "text_delta") {
-                    const openAIFormat = { choices: [{ delta: { content: parsed.delta.text } }] };
-                    controller.enqueue(encoder.encode(`data: ${JSON.stringify(openAIFormat)}\n\n`));
-                  } else if (parsed.type === "message_stop") {
-                    controller.enqueue(encoder.encode("data: [DONE]\n\n"));
-                  }
-                } catch { /* skip non-JSON */ }
-              }
-            }
-          }
-        } catch (error) {
-          console.error("Stream error:", error);
-          controller.error(error);
-        } finally {
-          controller.close();
-        }
-      },
-    });
-
-    return new Response(stream, {
-      headers: {
-        "Content-Type": "text/plain; charset=utf-8",
-        "Cache-Control": "no-cache",
-        Connection: "keep-alive",
-      },
-    });
-  } catch (error) {
-    console.error("AI tutor error:", error);
-    return new Response(JSON.stringify({ message: "Internal server error" }), {
-      status: 500,
-      headers: { "Content-Type": "application/json" },
-    });
-  }
-}
+      con
