@@ -1,0 +1,278 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+    --primary: 201 96% 32%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 173 58% 39%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 201 96% 32%;
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 201 96% 45%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 173 58% 45%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 201 96% 45%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+[data-hydration-error] {
+  display: none !important;
+}
+
+.prose {
+  max-width: none;
+}
+
+.prose h2 {
+  @apply text-2xl font-bold mt-6 mb-4 text-gray-800;
+}
+
+.prose h3 {
+  @apply text-xl font-semibold mt-4 mb-3 text-gray-700;
+}
+
+.prose p {
+  @apply mb-4 text-gray-600 leading-relaxed;
+}
+
+.prose ul {
+  @apply list-disc list-inside mb-4 space-y-2;
+}
+
+.prose ol {
+  @apply list-decimal list-inside mb-4 space-y-2;
+}
+
+.prose li {
+  @apply text-gray-600;
+}
+
+.prose pre {
+  @apply bg-gray-800 text-green-400 p-4 rounded-lg overflow-x-auto mb-4;
+}
+
+.prose code {
+  @apply font-mono text-sm;
+}
+
+.prose table {
+  @apply w-full border-collapse mb-4;
+}
+
+.prose th, .prose td {
+  @apply border border-gray-300 px-4 py-2 text-left;
+}
+
+.prose th {
+  @apply bg-gray-100 font-semibold;
+}
+
+.prose a {
+  @apply text-primary underline hover:text-primary/80;
+}
+
+.prose strong {
+  @apply font-semibold text-gray-800;
+}
+
+/* AI Chatbot Message Content Styles */
+.message-content {
+  line-height: 1.6;
+}
+
+.message-content strong {
+  font-weight: 600;
+  color: #1e293b;
+}
+
+.message-content em {
+  font-style: italic;
+  color: #475569;
+}
+
+/* KaTeX Display Math Wrapper */
+.katex-display-wrapper {
+  margin: 1rem 0;
+  padding: 0.75rem 1rem;
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  border-radius: 0.75rem;
+  border: 1px solid #e2e8f0;
+  overflow-x: auto;
+}
+
+.katex-display-wrapper .katex {
+  font-size: 1.1em;
+}
+
+/* Inline KaTeX styles */
+.message-content .katex {
+  font-size: 1em;
+  color: #1e40af;
+}
+
+/* KaTeX overrides for better mobile display */
+.katex-display {
+  margin: 0 !important;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+/* Scrollbar styling for math overflow */
+.katex-display-wrapper::-webkit-scrollbar {
+  height: 6px;
+}
+
+.katex-display-wrapper::-webkit-scrollbar-track {
+  background: #f1f5f9;
+  border-radius: 3px;
+}
+
+.katex-display-wrapper::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 3px;
+}
+
+.katex-display-wrapper::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* Math Solution Table Styles */
+.math-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1rem 0;
+  font-size: 0.9rem;
+  background: white;
+  border-radius: 0.75rem;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+.math-table thead {
+  background: linear-gradient(135deg, #0369a1 0%, #0891b2 100%);
+  color: white;
+}
+
+.math-table th {
+  padding: 0.75rem 1rem;
+  text-align: left;
+  font-weight: 600;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.math-table th:first-child {
+  width: 50%;
+}
+
+.math-table tbody tr {
+  border-bottom: 1px solid #e2e8f0;
+  transition: background-color 0.15s ease;
+}
+
+.math-table tbody tr:last-child {
+  border-bottom: none;
+  background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+}
+
+.math-table tbody tr:hover {
+  background-color: #f8fafc;
+}
+
+.math-table tbody tr:last-child:hover {
+  background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+}
+
+.math-table td {
+  padding: 0.875rem 1rem;
+  vertical-align: middle;
+}
+
+.math-table .math-cell {
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  font-family: inherit;
+}
+
+.math-table .math-cell .katex {
+  font-size: 1.1em;
+}
+
+.math-table .explanation-cell {
+  color: #475569;
+  line-height: 1.5;
+}
+
+.math-table .katex-display {
+  margin: 0 !important;
+  text-align: center;
+}
+
+/* Ensure good contrast for inline katex in explanations */
+.math-table .explanation-cell .katex {
+  color: #1e40af;
+  font-size: 0.95em;
+}
+
+/* Arrow row styling - for step connectors */
+.math-table .arrow-row {
+  background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%) !important;
+}
+
+.math-table .arrow-row td {
+  padding: 0.5rem 1rem;
+  font-size: 0.85rem;
+}
+
+.math-table .arrow-row .math-cell {
+  text-align: center;
+  background: transparent !important;
+}
+
+.math-table .arrow-row .explanation-cell {
+  font-style: italic;
+  color: #92400e;
+}
